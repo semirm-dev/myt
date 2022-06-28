@@ -7,8 +7,23 @@ services:
       context: .
       dockerfile: cmd/product/Dockerfile
     container_name: myt_products
+    command:
+      - -discounts_uri=myt_discounts:8002
     ports:
       - "8001:8001"
+    depends_on:
+      - db
+      - discounts
+    networks:
+      - myt
+  discounts:
+    image: semirm/myt-discounts:1
+    build:
+      context: .
+      dockerfile: cmd/discount/Dockerfile
+    container_name: myt_discounts
+    ports:
+      - "8002:8002"
     depends_on:
       - db
     networks:

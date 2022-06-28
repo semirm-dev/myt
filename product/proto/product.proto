@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package product;
 
-import "google/protobuf/empty.proto";
-
-option go_package = "github.com/semirm-dev/myt/product";
+option go_package = "github.com/semirm-dev/myt/product/proto";
 
 service Product {
   rpc GetProductsByFilter(GetProductsByFilterRequest) returns(ProductsResponse) {};
@@ -13,6 +11,10 @@ service Product {
 message GetProductsByFilterRequest {
   int64 price_less_then = 1;
   string by_category = 2;
+}
+
+message ProductsResponse {
+  repeated ProductMessage products = 1;
 }
 
 message ProductMessage {
@@ -27,8 +29,4 @@ message PriceMessage {
   int64 final = 2;
   string discount_percentage = 3;
   string currency = 4;
-}
-
-message ProductsResponse {
-  repeated ProductMessage products = 1;
 }

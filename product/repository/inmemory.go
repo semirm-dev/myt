@@ -6,19 +6,6 @@ import (
 	"strings"
 )
 
-type productInMemory struct {
-	Sku      string
-	Name     string
-	Category string
-	Price    int
-}
-
-type discountInMemory struct {
-	discountBy string
-	amount     int
-	valid      bool
-}
-
 var productsInMemory = []*productInMemory{
 	{
 		Sku:      "000001",
@@ -52,22 +39,11 @@ var productsInMemory = []*productInMemory{
 	},
 }
 
-var discountsInMemory = []*discountInMemory{
-	{
-		discountBy: "category",
-		amount:     30,
-		valid:      true,
-	},
-	{
-		discountBy: "sku",
-		amount:     15,
-		valid:      true,
-	},
-	{
-		discountBy: "sku",
-		amount:     50,
-		valid:      false,
-	},
+type productInMemory struct {
+	Sku      string
+	Name     string
+	Category string
+	Price    int
 }
 
 type inMemoryRepository struct {

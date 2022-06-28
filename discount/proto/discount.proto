@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package discount;
+
+option go_package = "github.com/semirm-dev/myt/discount/proto";
+
+service DiscountProvider {
+  rpc GetDiscounts(DiscountsRequest) returns(DiscountsResponse) {};
+}
+
+message DiscountsRequest {
+
+}
+
+message DiscountsResponse {
+  repeated DiscountMessage discounts = 1;
+}
+
+message DiscountMessage {
+  string sku = 1;
+  string category = 2;
+  int64 discount_percentage = 3;
+}
