@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  products:
+    image: semirm/myt-products:1
+    build:
+      context: .
+      dockerfile: cmd/product/Dockerfile
+    container_name: myt_products
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    networks:
+      - myt
+  gateway:
+    image: semirm/myt-gateway:1
+    build:
+      context: .
+      dockerfile: cmd/gateway/Dockerfile
+    container_name: myt_gateway
+    command:
+      - -products_uri=myt_products:8001
+      - -usr=default
+      - -pwd=default
+    ports:
+      - "8000:8000"
+    depends_on:
+      - products
+    networks:
+      - myt
+  db:
+    image: postgres:latest
+    container_name: myt_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=myt_db
+    ports:
+      - "5432:5432"
+    networks:
+      - myt
+networks:
+  myt:
