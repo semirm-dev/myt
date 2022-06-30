@@ -21,8 +21,20 @@ var discountsInMemory = []*discountInMemory{
 		amount: 15,
 	},
 	{
+		sku:    "000003",
+		amount: 35,
+	},
+	{
+		sku:    "000003",
+		amount: 25,
+	},
+	{
 		category: "boots",
 		amount:   50,
+	},
+	{
+		category: "boots",
+		amount:   40,
 	},
 }
 

@@ -59,9 +59,13 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 
 	for _, p := range products {
 		discountsForProduct := discountsPerProduct(p, discounts)
-		distinct := distinctDiscounts(discountsForProduct)
 
-		for _, d := range distinct {
+		// sorting is needed to get the highest discount applied as the final discount
+		sort.Slice(discountsForProduct, func(i, j int) bool {
+			return discountsForProduct[i].Percentage < discountsForProduct[j].Percentage
+		})
+
+		for _, d := range discountsForProduct {
 			if d.Percentage > 0 {
 				p.Price.DiscountPercentage = fmt.Sprintf("%d%s", d.Percentage, "%")
 			}
@@ -79,14 +83,6 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	}
 
 	return filtered
-}
-
-func distinctDiscounts(discounts []*Discount) []*Discount {
-	sort.Slice(discounts, func(i, j int) bool {
-		return discounts[i].Percentage > discounts[j].Percentage
-	})
-
-	return discounts
 }
 
 func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {

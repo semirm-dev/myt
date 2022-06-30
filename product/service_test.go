@@ -104,6 +104,7 @@ func TestDefaultService_GetProductsByFilter(t *testing.T) {
 			})
 
 			assert.NoError(t, err)
+			assert.NotNil(t, resp)
 			assert.Equal(t, ts.expectedCount, len(resp.Products))
 		})
 	}
