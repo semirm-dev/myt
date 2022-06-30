@@ -77,6 +77,11 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 			if p.Category == d.Category {
 				p.Price.Final = int64(calculateDiscount(int(p.Price.Original), d.Percentage))
 			}
+
+		}
+
+		if p.Price.Final == 0 {
+			p.Price.Final = p.Price.Original
 		}
 
 		filtered = append(filtered, p)

@@ -92,6 +92,19 @@ func TestDefaultService_ApplyDiscount(t *testing.T) {
 			expectedPriceFinal:         500,
 			expectedDiscountPercentage: "50%",
 		},
+		"given product without applicable discount": {
+			product: &pbProduct.ProductMessage{
+				Sku:      "000004",
+				Name:     "my product",
+				Category: "sandals",
+				Price: &pbProduct.PriceMessage{
+					Original: 1000,
+				},
+			},
+			expectedPriceOriginal:      1000,
+			expectedPriceFinal:         1000,
+			expectedDiscountPercentage: "",
+		},
 	}
 
 	client := grpcClient()
