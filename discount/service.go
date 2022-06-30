@@ -32,7 +32,7 @@ type Repository interface {
 }
 
 // Filter discounts from data store, so we do not retrieve all discounts.
-// Get only discounts that match given filter (products)
+// Get only discounts which are related to given products.
 type Filter struct {
 	Sku      []string
 	Category []string
