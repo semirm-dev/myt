@@ -66,7 +66,7 @@ func grpcClient() pbProduct.ProductClient {
 	return pbProduct.NewProductClient(conn)
 }
 
-func TestService_Find(t *testing.T) {
+func TestDefaultService_GetProductsByFilter(t *testing.T) {
 	client := grpcClient()
 
 	testSuite := map[string]struct {
