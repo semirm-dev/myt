@@ -28,7 +28,14 @@ type defaultService struct {
 
 // Repository communicates to data store with discounts
 type Repository interface {
-	GetDiscount(ctx context.Context) ([]*Discount, error)
+	GetDiscounts(ctx context.Context, filter *Filter) ([]*Discount, error)
+}
+
+// Filter discounts from data store, so we do not retrieve all discounts.
+// Get only discounts that match given filter (products)
+type Filter struct {
+	Sku      []string
+	Category []string
 }
 
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
@@ -41,8 +48,7 @@ func (svc *defaultService) RegisterGrpcServer(server *grpcLib.Server) {
 
 // ApplyDiscount will apply discounts on provided products.
 func (svc *defaultService) ApplyDiscount(ctx context.Context, req *pbDiscount.DiscountsRequest) (*pbDiscount.DiscountsResponse, error) {
-	// we can filter discounts by product.sku or product.category, so we get only discounts applicable to needed products
-	discounts, err := svc.repo.GetDiscount(ctx)
+	discounts, err := svc.repo.GetDiscounts(ctx, uniqueFilters(req.Products))
 	if err != nil {
 		return nil, err
 	}
@@ -58,14 +64,14 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	var filtered []*pbProduct.ProductMessage
 
 	for _, p := range products {
-		discountsForProduct := discountsPerProduct(p, discounts)
+		productDiscounts := discountsForProduct(p, discounts)
 
 		// sorting is needed to get the highest discount applied as the final discount
-		sort.Slice(discountsForProduct, func(i, j int) bool {
-			return discountsForProduct[i].Percentage < discountsForProduct[j].Percentage
+		sort.Slice(productDiscounts, func(i, j int) bool {
+			return productDiscounts[i].Percentage < productDiscounts[j].Percentage
 		})
 
-		for _, d := range discountsForProduct {
+		for _, d := range productDiscounts {
 			if d.Percentage > 0 {
 				p.Price.DiscountPercentage = fmt.Sprintf("%d%s", d.Percentage, "%")
 			}
@@ -90,7 +96,7 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	return filtered
 }
 
-func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
+func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
 	var filtered []*Discount
 
 	for _, d := range discounts {
@@ -100,6 +106,25 @@ func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discoun
 	}
 
 	return filtered
+}
+
+func uniqueFilters(products []*pbProduct.ProductMessage) *Filter {
+	filter := &Filter{}
+	keys := make(map[string]bool)
+
+	for _, p := range products {
+		if _, value := keys[p.Sku]; !value {
+			keys[p.Sku] = true
+			filter.Sku = append(filter.Sku, p.Sku)
+		}
+
+		if _, value := keys[p.Category]; !value {
+			keys[p.Category] = true
+			filter.Category = append(filter.Category, p.Category)
+		}
+	}
+
+	return filter
 }
 
 func calculateDiscount(price int, percentage int) int {

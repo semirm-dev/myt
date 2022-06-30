@@ -57,8 +57,24 @@ func NewInMemoryRepository() discount.Repository {
 	}
 }
 
-func (repo *inMemoryRepository) GetDiscount(ctx context.Context) ([]*discount.Discount, error) {
-	discounts := repo.discounts
+func (repo *inMemoryRepository) GetDiscounts(ctx context.Context, filter *discount.Filter) ([]*discount.Discount, error) {
+	var discounts []*discountInMemory
+
+	for _, s := range filter.Sku {
+		for _, d := range repo.discounts {
+			if d.sku == s {
+				discounts = append(discounts, d)
+			}
+		}
+	}
+
+	for _, c := range filter.Category {
+		for _, d := range repo.discounts {
+			if d.category == c {
+				discounts = append(discounts, d)
+			}
+		}
+	}
 
 	return inMemoryToDiscounts(discounts), nil
 }
