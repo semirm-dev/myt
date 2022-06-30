@@ -11,20 +11,24 @@ import (
 
 const serviceName = "product service"
 
-func NewService(addr string, repo Repository, discountClientAddr string) *defaultService {
-	return &defaultService{
-		addr:               addr,
-		repo:               repo,
-		discountClientAddr: discountClientAddr,
-	}
-}
-
 // defaultService will expose products service via grpc
 type defaultService struct {
 	pbProduct.UnimplementedProductServer
-	addr               string
-	repo               Repository
-	discountClientAddr string
+	addr             string
+	repo             Repository
+	discountProvider DiscountProvider
+}
+
+type DiscountProvider interface {
+	GetDiscounts(ctx context.Context) (*pbDiscount.DiscountsResponse, error)
+}
+
+func NewService(addr string, repo Repository, discountProvider DiscountProvider) *defaultService {
+	return &defaultService{
+		addr:             addr,
+		repo:             repo,
+		discountProvider: discountProvider,
+	}
 }
 
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
@@ -44,10 +48,7 @@ func (svc *defaultService) GetProductsByFilter(ctx context.Context, req *pbProdu
 		return nil, err
 	}
 
-	conn := grpc.CreateClientConnection(svc.discountClientAddr)
-	discountsClient := pbDiscount.NewDiscountProviderClient(conn)
-
-	discounts, err := discountsClient.GetDiscounts(ctx, &pbDiscount.DiscountsRequest{})
+	discounts, err := svc.discountProvider.GetDiscounts(ctx)
 	if err != nil {
 		return nil, err
 	}

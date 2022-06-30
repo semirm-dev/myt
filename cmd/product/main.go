@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/semirm-dev/myt/cmd/product/discount"
 	"github.com/semirm-dev/myt/product"
 	"github.com/semirm-dev/myt/product/repository"
 )
@@ -15,7 +16,7 @@ var (
 func main() {
 	flag.Parse()
 
-	svc := product.NewService(*addr, repository.NewInMemoryRepository(), *discountsUri)
+	svc := product.NewService(*addr, repository.NewInMemoryRepository(), &discount.Provider{Addr: *discountsUri})
 
 	rootCtx, rootCancel := context.WithCancel(context.Background())
 	defer rootCancel()
