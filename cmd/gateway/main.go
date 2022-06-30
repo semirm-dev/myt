@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"github.com/semirm-dev/myt/gateway"
-	"github.com/semirm-dev/myt/gateway/handlers"
 	"github.com/semirm-dev/myt/internal/web"
 	"github.com/semirm-dev/myt/product"
 )
@@ -23,7 +22,7 @@ func main() {
 	router.Use(gateway.BasicAuth(*authUser, *authPwd))
 
 	productsClient := product.NewClient(*productsUri)
-	router.GET("products", handlers.GetProducts(productsClient))
+	router.GET("products", gateway.GetProducts(productsClient))
 
 	web.ServeHttp(*httpAddr, "gateway", router)
 }
