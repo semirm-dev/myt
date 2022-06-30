@@ -6,7 +6,7 @@ import (
 	pbProduct "github.com/semirm-dev/myt/product/proto"
 )
 
-// Client is responsible for communication with product Service
+// Client is responsible for communication with product Service from external services (Gateway)
 type Client interface {
 	GetProductsByFilter(ctx context.Context, filter *Filter) ([]*pbProduct.ProductMessage, error)
 }

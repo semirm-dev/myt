@@ -46,6 +46,7 @@ type productInMemory struct {
 	Price    int
 }
 
+// inMemoryRepository is in memory data store implementation for products
 type inMemoryRepository struct {
 	products []*productInMemory
 }

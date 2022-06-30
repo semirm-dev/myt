@@ -16,14 +16,12 @@ func toProtoProductMessage(product *Product) *pbProduct.ProductMessage {
 	}
 }
 
-func toProtoProductsResponse(products []*Product) *pbProduct.ProductsResponse {
-	var resp []*pbProduct.ProductMessage
+func toProtoProductsMessage(products []*Product) []*pbProduct.ProductMessage {
+	var protoProducts []*pbProduct.ProductMessage
 
 	for _, product := range products {
-		resp = append(resp, toProtoProductMessage(product))
+		protoProducts = append(protoProducts, toProtoProductMessage(product))
 	}
 
-	return &pbProduct.ProductsResponse{
-		Products: resp,
-	}
+	return protoProducts
 }

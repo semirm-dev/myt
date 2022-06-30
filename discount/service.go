@@ -24,10 +24,12 @@ type defaultService struct {
 	repo Repository
 }
 
+// Repository communicates to data store with discounts
 type Repository interface {
 	GetDiscount(ctx context.Context) ([]*Discount, error)
 }
 
+// ListenForConnections will start grpc server and start listening for connections
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
 	grpc.ListenForConnections(ctx, svc, svc.addr, serviceName)
 }
@@ -36,6 +38,7 @@ func (svc *defaultService) RegisterGrpcServer(server *grpcLib.Server) {
 	pbDiscount.RegisterDiscountProviderServer(server, svc)
 }
 
+// ApplyDiscount will apply discounts on provided products.
 func (svc *defaultService) ApplyDiscount(ctx context.Context, req *pbDiscount.DiscountsRequest) (*pbDiscount.DiscountsResponse, error) {
 	discounts, err := svc.repo.GetDiscount(ctx)
 	if err != nil {

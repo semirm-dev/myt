@@ -26,6 +26,7 @@ var discountsInMemory = []*discountInMemory{
 	},
 }
 
+// inMemoryRepository is in memory data store implementation for discounts
 type inMemoryRepository struct {
 	discounts []*discountInMemory
 }
