@@ -8,8 +8,10 @@ func inMemoryToProduct(p *productInMemory) *product.Product {
 		Name:     p.Name,
 		Category: p.Category,
 		Price: &product.Price{
-			Original: p.Price,
-			Final:    p.Price,
+			Original:           p.Price,
+			Final:              p.Price,
+			Currency:           "EUR",
+			DiscountPercentage: 0,
 		},
 	}
 }

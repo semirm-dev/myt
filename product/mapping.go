@@ -1,8 +1,16 @@
 package product
 
-import pbProduct "github.com/semirm-dev/myt/product/proto"
+import (
+	pbProduct "github.com/semirm-dev/myt/product/proto"
+)
 
 func toProtoProductMessage(product *Product) *pbProduct.ProductMessage {
+	discountPercentage := ""
+
+	if product.Price.DiscountPercentage > 0 {
+		discountPercentage = string(product.Price.DiscountPercentage)
+	}
+
 	return &pbProduct.ProductMessage{
 		Sku:      product.Sku,
 		Name:     product.Name,
@@ -10,7 +18,7 @@ func toProtoProductMessage(product *Product) *pbProduct.ProductMessage {
 		Price: &pbProduct.PriceMessage{
 			Original:           int64(product.Price.Original),
 			Final:              int64(product.Price.Final),
-			DiscountPercentage: product.Price.DiscountPercentage,
+			DiscountPercentage: discountPercentage,
 			Currency:           product.Price.Currency,
 		},
 	}

@@ -10,6 +10,6 @@ type Product struct {
 type Price struct {
 	Original           int
 	Final              int
-	DiscountPercentage string
+	DiscountPercentage int
 	Currency           string
 }
