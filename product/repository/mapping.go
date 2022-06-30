@@ -9,6 +9,7 @@ func inMemoryToProduct(p *productInMemory) *product.Product {
 		Category: p.Category,
 		Price: &product.Price{
 			Original: p.Price,
+			Final:    p.Price,
 		},
 	}
 }

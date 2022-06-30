@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DiscountProviderClient interface {
-	GetDiscounts(ctx context.Context, in *DiscountsRequest, opts ...grpc.CallOption) (*DiscountsResponse, error)
+	ApplyDiscount(ctx context.Context, in *DiscountsRequest, opts ...grpc.CallOption) (*DiscountsResponse, error)
 }
 
 type discountProviderClient struct {
@@ -33,9 +33,9 @@ func NewDiscountProviderClient(cc grpc.ClientConnInterface) DiscountProviderClie
 	return &discountProviderClient{cc}
 }
 
-func (c *discountProviderClient) GetDiscounts(ctx context.Context, in *DiscountsRequest, opts ...grpc.CallOption) (*DiscountsResponse, error) {
+func (c *discountProviderClient) ApplyDiscount(ctx context.Context, in *DiscountsRequest, opts ...grpc.CallOption) (*DiscountsResponse, error) {
 	out := new(DiscountsResponse)
-	err := c.cc.Invoke(ctx, "/discount.DiscountProvider/GetDiscounts", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/discount.DiscountProvider/ApplyDiscount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *discountProviderClient) GetDiscounts(ctx context.Context, in *Discounts
 // All implementations must embed UnimplementedDiscountProviderServer
 // for forward compatibility
 type DiscountProviderServer interface {
-	GetDiscounts(context.Context, *DiscountsRequest) (*DiscountsResponse, error)
+	ApplyDiscount(context.Context, *DiscountsRequest) (*DiscountsResponse, error)
 	mustEmbedUnimplementedDiscountProviderServer()
 }
 
@@ -54,8 +54,8 @@ type DiscountProviderServer interface {
 type UnimplementedDiscountProviderServer struct {
 }
 
-func (UnimplementedDiscountProviderServer) GetDiscounts(context.Context, *DiscountsRequest) (*DiscountsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDiscounts not implemented")
+func (UnimplementedDiscountProviderServer) ApplyDiscount(context.Context, *DiscountsRequest) (*DiscountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyDiscount not implemented")
 }
 func (UnimplementedDiscountProviderServer) mustEmbedUnimplementedDiscountProviderServer() {}
 
@@ -70,20 +70,20 @@ func RegisterDiscountProviderServer(s grpc.ServiceRegistrar, srv DiscountProvide
 	s.RegisterService(&DiscountProvider_ServiceDesc, srv)
 }
 
-func _DiscountProvider_GetDiscounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DiscountProvider_ApplyDiscount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DiscountsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DiscountProviderServer).GetDiscounts(ctx, in)
+		return srv.(DiscountProviderServer).ApplyDiscount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/discount.DiscountProvider/GetDiscounts",
+		FullMethod: "/discount.DiscountProvider/ApplyDiscount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DiscountProviderServer).GetDiscounts(ctx, req.(*DiscountsRequest))
+		return srv.(DiscountProviderServer).ApplyDiscount(ctx, req.(*DiscountsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var DiscountProvider_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DiscountProviderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetDiscounts",
-			Handler:    _DiscountProvider_GetDiscounts_Handler,
+			MethodName: "ApplyDiscount",
+			Handler:    _DiscountProvider_ApplyDiscount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

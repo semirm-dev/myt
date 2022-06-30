@@ -4,6 +4,7 @@ import (
 	"context"
 	pbDiscount "github.com/semirm-dev/myt/discount/proto"
 	"github.com/semirm-dev/myt/internal/grpc"
+	pbProduct "github.com/semirm-dev/myt/product/proto"
 	grpcLib "google.golang.org/grpc"
 )
 
@@ -23,6 +24,10 @@ type defaultService struct {
 	repo Repository
 }
 
+type Repository interface {
+	GetDiscount(ctx context.Context) ([]*Discount, error)
+}
+
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
 	grpc.ListenForConnections(ctx, svc, svc.addr, serviceName)
 }
@@ -31,11 +36,19 @@ func (svc *defaultService) RegisterGrpcServer(server *grpcLib.Server) {
 	pbDiscount.RegisterDiscountProviderServer(server, svc)
 }
 
-func (svc *defaultService) GetDiscounts(ctx context.Context, req *pbDiscount.DiscountsRequest) (*pbDiscount.DiscountsResponse, error) {
+func (svc *defaultService) ApplyDiscount(ctx context.Context, req *pbDiscount.DiscountsRequest) (*pbDiscount.DiscountsResponse, error) {
 	discounts, err := svc.repo.GetDiscount(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return toProtoDiscountsResponse(discounts), nil
+	productsWithDiscount := applyDiscount(req.Products, discounts)
+
+	return &pbDiscount.DiscountsResponse{
+		Products: productsWithDiscount,
+	}, nil
+}
+
+func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) []*pbProduct.ProductMessage {
+	return products
 }

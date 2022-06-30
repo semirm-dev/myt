@@ -2,10 +2,8 @@ package product
 
 import (
 	"context"
-	pbDiscount "github.com/semirm-dev/myt/discount/proto"
 	"github.com/semirm-dev/myt/internal/grpc"
 	pbProduct "github.com/semirm-dev/myt/product/proto"
-	"github.com/sirupsen/logrus"
 	grpcLib "google.golang.org/grpc"
 )
 
@@ -19,8 +17,12 @@ type defaultService struct {
 	discountProvider DiscountProvider
 }
 
+type Repository interface {
+	GetProductsByFilter(ctx context.Context, filter *Filter) ([]*Product, error)
+}
+
 type DiscountProvider interface {
-	GetDiscounts(ctx context.Context) (*pbDiscount.DiscountsResponse, error)
+	ApplyDiscount(ctx context.Context, products []*pbProduct.ProductMessage) ([]*pbProduct.ProductMessage, error)
 }
 
 func NewService(addr string, repo Repository, discountProvider DiscountProvider) *defaultService {
@@ -48,14 +50,14 @@ func (svc *defaultService) GetProductsByFilter(ctx context.Context, req *pbProdu
 		return nil, err
 	}
 
-	discounts, err := svc.discountProvider.GetDiscounts(ctx)
+	productsResp := toProtoProductsResponse(products)
+
+	productsWithDiscount, err := svc.discountProvider.ApplyDiscount(ctx, productsResp.Products)
 	if err != nil {
 		return nil, err
 	}
 
-	logrus.Info(discounts)
-
-	productsResp := toProtoProductsResponse(products)
-
-	return productsResp, nil
+	return &pbProduct.ProductsResponse{
+		Products: productsWithDiscount,
+	}, nil
 }
