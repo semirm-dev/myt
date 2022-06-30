@@ -2,13 +2,14 @@ package product
 
 import (
 	pbProduct "github.com/semirm-dev/myt/product/proto"
+	"strconv"
 )
 
 func toProtoProductMessage(product *Product) *pbProduct.ProductMessage {
 	discountPercentage := ""
 
 	if product.Price.DiscountPercentage > 0 {
-		discountPercentage = string(product.Price.DiscountPercentage)
+		discountPercentage = strconv.Itoa(product.Price.DiscountPercentage)
 	}
 
 	return &pbProduct.ProductMessage{

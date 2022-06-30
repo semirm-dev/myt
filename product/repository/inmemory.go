@@ -48,17 +48,17 @@ type productInMemory struct {
 
 // inMemoryRepository is in memory data store implementation for products
 type inMemoryRepository struct {
-	products []*productInMemory
+	Products []*productInMemory
 }
 
 func NewInMemoryRepository() product.Repository {
 	return &inMemoryRepository{
-		products: productsInMemory,
+		Products: productsInMemory,
 	}
 }
 
 func (repo *inMemoryRepository) GetProductsByFilter(ctx context.Context, filter *product.Filter) ([]*product.Product, error) {
-	products := repo.products
+	products := repo.Products
 
 	if strings.TrimSpace(filter.ByCategory) != "" {
 		products = filterByCategory(products, filter.ByCategory)
