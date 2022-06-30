@@ -114,7 +114,7 @@ func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discoun
 
 // uniqueFilters will get unique list of product skus and categories.
 // This filter is then used to get discounts from data store.
-// Where condition in database table would usually solve this issue.
+// Where condition in database query would usually solve this issue.
 func uniqueFilters(products []*pbProduct.ProductMessage) *Filter {
 	filter := &Filter{}
 	keys := make(map[string]bool)
