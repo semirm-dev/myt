@@ -67,8 +67,6 @@ func grpcClient() pbProduct.ProductClient {
 }
 
 func TestDefaultService_GetProductsByFilter(t *testing.T) {
-	client := grpcClient()
-
 	testSuite := map[string]struct {
 		category      string
 		plt           int
@@ -79,12 +77,24 @@ func TestDefaultService_GetProductsByFilter(t *testing.T) {
 			plt:           0,
 			expectedCount: 5,
 		},
-		"boots category": {
+		"filter by category": {
 			category:      "boots",
 			plt:           0,
 			expectedCount: 3,
 		},
+		"filter by price": {
+			category:      "",
+			plt:           89000,
+			expectedCount: 4,
+		},
+		"filter by category and price": {
+			category:      "boots",
+			plt:           89000,
+			expectedCount: 2,
+		},
 	}
+
+	client := grpcClient()
 
 	for name, ts := range testSuite {
 		t.Run(name, func(t *testing.T) {
