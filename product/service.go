@@ -50,9 +50,9 @@ func (svc *defaultService) GetProductsByFilter(ctx context.Context, req *pbProdu
 		return nil, err
 	}
 
-	productsResp := toProtoProductsResponse(products)
+	productsProto := toProtoProductsResponse(products)
 
-	productsWithDiscount, err := svc.discountProvider.ApplyDiscount(ctx, productsResp.Products)
+	productsWithDiscount, err := svc.discountProvider.ApplyDiscount(ctx, productsProto.Products)
 	if err != nil {
 		return nil, err
 	}
