@@ -66,7 +66,7 @@ func TestDefaultService_ApplyDiscount(t *testing.T) {
 		expectedPriceFinal         int64
 		expectedDiscountPercentage string
 	}{
-		"sku with highest discount of 35% and lowest discount of 15% will apply 35%": {
+		"given sku with highest discount of 35% and lowest discount of 15% will apply 35%": {
 			product: &pbProduct.ProductMessage{
 				Sku:      "000003",
 				Name:     "my product",
@@ -78,6 +78,19 @@ func TestDefaultService_ApplyDiscount(t *testing.T) {
 			expectedPriceOriginal:      1000,
 			expectedPriceFinal:         650,
 			expectedDiscountPercentage: "35%",
+		},
+		"given category with highest discount of 50% and lowest discount of 30% will apply 50%": {
+			product: &pbProduct.ProductMessage{
+				Sku:      "000001",
+				Name:     "my product",
+				Category: "boots",
+				Price: &pbProduct.PriceMessage{
+					Original: 1000,
+				},
+			},
+			expectedPriceOriginal:      1000,
+			expectedPriceFinal:         500,
+			expectedDiscountPercentage: "50%",
 		},
 	}
 
