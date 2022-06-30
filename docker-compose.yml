@@ -41,16 +41,5 @@ services:
       - products
     networks:
       - myt
-#  db:
-#    image: postgres:latest
-#    container_name: myt_postgres
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - POSTGRES_DB=myt_db
-#    ports:
-#      - "5432:5432"
-#    networks:
-#      - myt
 networks:
   myt:
