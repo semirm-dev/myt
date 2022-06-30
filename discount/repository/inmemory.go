@@ -36,6 +36,14 @@ var discountsInMemory = []*discountInMemory{
 		category: "boots",
 		amount:   40,
 	},
+	{
+		sku:    "000010",
+		amount: 25,
+	},
+	{
+		sku:    "000015",
+		amount: 25,
+	},
 }
 
 // inMemoryRepository is in memory data store implementation for discounts
