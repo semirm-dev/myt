@@ -60,6 +60,8 @@ func NewInMemoryRepository() discount.Repository {
 func (repo *inMemoryRepository) GetDiscounts(ctx context.Context, filter *discount.Filter) ([]*discount.Discount, error) {
 	var discounts []*discountInMemory
 
+	// solved with Where conditions in database query
+
 	for _, s := range filter.Sku {
 		for _, d := range repo.discounts {
 			if d.sku == s {

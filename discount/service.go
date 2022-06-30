@@ -67,6 +67,7 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 		productDiscounts := discountsForProduct(p, discounts)
 
 		// sorting is needed to get the highest discount applied as the final discount
+		// aggregate function like MAX() would solve this issue
 		sort.Slice(productDiscounts, func(i, j int) bool {
 			return productDiscounts[i].Percentage < productDiscounts[j].Percentage
 		})
@@ -96,6 +97,9 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	return filtered
 }
 
+// discountsForProduct will filter discounts only related to given product.
+// We do not want to apply discount from other products.
+// Joins in database would solve this issue.
 func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
 	var filtered []*Discount
 
@@ -108,16 +112,18 @@ func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discoun
 	return filtered
 }
 
+// uniqueFilters will get unique list of product skus and categories.
+// This filter is then used to get discounts from data store.
+// Where condition in database table would usually solve this issue.
 func uniqueFilters(products []*pbProduct.ProductMessage) *Filter {
 	filter := &Filter{}
 	keys := make(map[string]bool)
 
 	for _, p := range products {
-		if _, value := keys[p.Sku]; !value {
-			keys[p.Sku] = true
-			filter.Sku = append(filter.Sku, p.Sku)
-		}
+		// sku is unique, no need to check if it's already added to filter
+		filter.Sku = append(filter.Sku, p.Sku)
 
+		// filter unique categories from given products
 		if _, value := keys[p.Category]; !value {
 			keys[p.Category] = true
 			filter.Category = append(filter.Category, p.Category)
