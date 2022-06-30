@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// ServeHttp will start http server with graceful shutdown
 func ServeHttp(addr, serviceName string, router http.Handler) {
 	srv := &http.Server{
 		Addr:    addr,

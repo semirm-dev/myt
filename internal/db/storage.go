@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// PostgresDb will initialize pg gorm database
 func PostgresDb(connString string) *gorm.DB {
 	if strings.TrimSpace(connString) == "" {
 		logrus.Error("missing connection string")

@@ -29,7 +29,6 @@ type Repository interface {
 	GetDiscount(ctx context.Context) ([]*Discount, error)
 }
 
-// ListenForConnections will start grpc server and start listening for connections
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
 	grpc.ListenForConnections(ctx, svc, svc.addr, serviceName)
 }

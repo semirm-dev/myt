@@ -8,10 +8,12 @@ import (
 	"net"
 )
 
+// ServiceRegistrar will make sure our services can be registered as grpc servers
 type ServiceRegistrar interface {
 	RegisterGrpcServer(server *grpc.Server)
 }
 
+// ListenForConnections will start grpc server and start listening for connections
 func ListenForConnections(ctx context.Context, registrar ServiceRegistrar, addr, serviceName string) {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -32,6 +34,7 @@ func ListenForConnections(ctx context.Context, registrar ServiceRegistrar, addr,
 	}
 }
 
+// CreateClientConnection will create grpc client
 func CreateClientConnection(addr string) *grpc.ClientConn {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),

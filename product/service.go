@@ -35,7 +35,6 @@ func NewService(addr string, repo Repository, discountProvider DiscountProvider)
 	}
 }
 
-// ListenForConnections will start grpc server and start listening for connections
 func (svc *defaultService) ListenForConnections(ctx context.Context) {
 	grpc.ListenForConnections(ctx, svc, svc.addr, serviceName)
 }
