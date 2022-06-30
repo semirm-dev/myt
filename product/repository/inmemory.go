@@ -71,6 +71,8 @@ func (repo *inMemoryRepository) GetProductsByFilter(ctx context.Context, filter 
 	return inMemoryToProducts(products), nil
 }
 
+// filterByCategory will get products with a given category.
+// Where condition in database query would solve this issue.
 func filterByCategory(products []*productInMemory, category string) []*productInMemory {
 	var filtered []*productInMemory
 
@@ -83,6 +85,8 @@ func filterByCategory(products []*productInMemory, category string) []*productIn
 	return filtered
 }
 
+// filterByPriceLessThan will get products with price less than given price.
+// Where condition in database query would solve this issue.
 func filterByPriceLessThan(products []*productInMemory, price int) []*productInMemory {
 	var filtered []*productInMemory
 
