@@ -14,7 +14,7 @@ type discountInMemory struct {
 var discountsInMemory = []*discountInMemory{
 	{
 		category: "boots",
-		amount:   30,
+		amount:   20,
 	},
 	{
 		sku:    "000003",
@@ -22,19 +22,19 @@ var discountsInMemory = []*discountInMemory{
 	},
 	{
 		sku:    "000003",
-		amount: 35,
+		amount: 10,
 	},
 	{
 		sku:    "000003",
-		amount: 25,
+		amount: 5,
 	},
 	{
 		category: "boots",
-		amount:   50,
+		amount:   30,
 	},
 	{
 		category: "boots",
-		amount:   40,
+		amount:   15,
 	},
 	{
 		sku:    "000010",
