@@ -48,7 +48,7 @@ func (svc *defaultService) RegisterGrpcServer(server *grpcLib.Server) {
 
 // ApplyDiscount will apply discounts on provided products.
 func (svc *defaultService) ApplyDiscount(ctx context.Context, req *pbDiscount.DiscountsRequest) (*pbDiscount.DiscountsResponse, error) {
-	discounts, err := svc.repo.GetDiscounts(ctx, uniqueFilters(req.Products))
+	discounts, err := svc.repo.GetDiscounts(ctx, filterDiscountsFor(req.Products))
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	var filtered []*pbProduct.ProductMessage
 
 	for _, p := range products {
-		productDiscounts := discountsForProduct(p, discounts)
+		productDiscounts := discountsPerProduct(p, discounts)
 
 		// sorting is needed to get the highest discount applied as the final discount
 		sort.Slice(productDiscounts, func(i, j int) bool {
@@ -97,10 +97,10 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	return filtered
 }
 
-// discountsForProduct will filter discounts only related to given product.
+// discountsPerProduct will filter discounts only related to given product.
 // We do not want to apply discount from other products.
 // Joins in database would solve this issue.
-func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
+func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
 	var filtered []*Discount
 
 	for _, d := range discounts {
@@ -112,10 +112,10 @@ func discountsForProduct(product *pbProduct.ProductMessage, discounts []*Discoun
 	return filtered
 }
 
-// uniqueFilters will get unique list of product skus and categories.
+// filterDiscountsFor will get unique list of products' skus and categories.
 // This filter is then used to get discounts from data store.
 // Where condition in database query would usually solve this issue.
-func uniqueFilters(products []*pbProduct.ProductMessage) *Filter {
+func filterDiscountsFor(products []*pbProduct.ProductMessage) *Filter {
 	filter := &Filter{}
 	keys := make(map[string]bool)
 
