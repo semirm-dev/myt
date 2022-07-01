@@ -29,7 +29,7 @@ docker-compose up
 
 **Tasks**
 - [x] Implement services: _Product, Discount_
-- [x] Immplement _Gateway_ to expose _Product_ service
+- [x] Implement _Gateway_ to expose services (Product only in this case)
 - [x] Write tests (Product and Discount services)
 - [x] All services and tests runnable by 1 command
 - [x] Products in _boots_ category have discount of 30%
