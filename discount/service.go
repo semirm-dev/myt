@@ -99,7 +99,6 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 
 // discountsPerProduct will filter discounts only related to given product.
 // We do not want to apply discount from other products.
-// Joins in database would solve this issue.
 func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discount) []*Discount {
 	var filtered []*Discount
 
@@ -114,7 +113,6 @@ func discountsPerProduct(product *pbProduct.ProductMessage, discounts []*Discoun
 
 // filterDiscountsFor will get unique list of products' skus and categories.
 // This filter is then used to get discounts from data store.
-// Where condition in database query would usually solve this issue.
 func filterDiscountsFor(products []*pbProduct.ProductMessage) *Filter {
 	filter := &Filter{}
 	keys := make(map[string]bool)
