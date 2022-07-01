@@ -67,24 +67,24 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 		productDiscounts := discountsForProduct(p, discounts)
 
 		// sorting is needed to get the highest discount applied as the final discount
-		// aggregate function like MAX() would solve this issue
 		sort.Slice(productDiscounts, func(i, j int) bool {
-			return productDiscounts[i].Percentage < productDiscounts[j].Percentage
+			return productDiscounts[i].Percentage > productDiscounts[j].Percentage
 		})
 
-		for _, d := range productDiscounts {
-			if d.Percentage > 0 {
-				p.Price.DiscountPercentage = fmt.Sprintf("%d%s", d.Percentage, "%")
+		if len(productDiscounts) > 0 {
+			biggestDiscount := productDiscounts[0]
+
+			if biggestDiscount.Percentage > 0 {
+				p.Price.DiscountPercentage = fmt.Sprintf("%d%s", biggestDiscount.Percentage, "%")
 			}
 
-			if p.Sku == d.Sku {
-				p.Price.Final = int64(calculateDiscount(int(p.Price.Original), d.Percentage))
+			if p.Category == biggestDiscount.Category {
+				p.Price.Final = int64(calculateDiscount(int(p.Price.Original), biggestDiscount.Percentage))
 			}
 
-			if p.Category == d.Category {
-				p.Price.Final = int64(calculateDiscount(int(p.Price.Original), d.Percentage))
+			if p.Sku == biggestDiscount.Sku {
+				p.Price.Final = int64(calculateDiscount(int(p.Price.Original), biggestDiscount.Percentage))
 			}
-
 		}
 
 		if p.Price.Final == 0 {
