@@ -15,12 +15,29 @@ docker-compose up
 
 **Discount service**
 * Runs on port 8002 (can be changed)
-* Mainly used to apply discounts on given products
+* Used to apply discounts on a given products
 
 **Gateway**
 * Runs on port 8000 (can be changed)
 * Exposes HTTP API for services (Product only in this case)
-* GET localhost:8000/products?priceLessThan=89000&category=boots
-* Basic auth needed (can be changed):
+* Endpoint: _GET localhost:8000/products?priceLessThan=89000&category=boots_
+* Basic is auth needed (can be changed):
     * Username: default
     * Password: default
+
+> All repositories (data stores) are implemented as in memory for the sake of the simplicity.
+
+**Tasks**
+- [x] Implement services: _Product, Discount_
+- [x] Immplement _Gateway_ to expose _Product_ service
+- [x] Write tests (Product and Discount services)
+- [x] All services and tests runnable by 1 command
+- [x] Products in _boots_ category have discount of 30%
+- [x] Products with sku _000003_ have discount of 15%
+- [x] Always apply the biggest discount
+- [x] Filter products by _category_
+- [x] Filter products by _price less than_
+- [x] If product doesnt have discount then price.Final == price.Original
+- [x] Default currency is _EUR_
+- [ ] Implement pagination (by default 5 items per page)
+- [ ] Provide SQL implementation instead of in memory 
