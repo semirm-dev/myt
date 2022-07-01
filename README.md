@@ -9,19 +9,19 @@ docker-compose up
 ```
 
 **Product service**
-* Runs on port 8001 (can be changed)
+* Runs on port 8001 (configurable)
 * Main service to get products
 * Communicates to Discounts service through grpc to apply discounts on given products
 
 **Discount service**
-* Runs on port 8002 (can be changed)
+* Runs on port 8002 (configurable)
 * Used to apply discounts on a given products
 
 **Gateway**
-* Runs on port 8000 (can be changed)
+* Runs on port 8000 (configurable)
 * Exposes HTTP API for services (Product only in this case)
 * Endpoint: _GET localhost:8000/products?priceLessThan=89000&category=boots_
-* Basic is auth needed (can be changed):
+* Basic is auth needed (configurable):
     * Username: default
     * Password: default
 
