@@ -21,3 +21,6 @@ docker-compose up
 * Runs on port 8000 (can be changed)
 * Exposes HTTP API for services (Product only in this case)
 * GET localhost:8000/products?priceLessThan=89000&category=boots
+* Basic auth needed (can be changed):
+    * Username: default
+    * Password: default
