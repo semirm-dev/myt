@@ -15,13 +15,13 @@ docker-compose up
 
 **Discount service**
 * Runs on port 8002 (configurable)
-* Used to apply discounts on a given products
+* Used to apply discounts on given products
 
 **Gateway**
 * Runs on port 8000 (configurable)
 * Exposes HTTP API for services (Product only in this case)
 * Endpoint: _GET localhost:8000/products?priceLessThan=89000&category=boots_
-* Basic is auth needed (configurable):
+* Basic auth is needed (configurable):
     * Username: default
     * Password: default
 
