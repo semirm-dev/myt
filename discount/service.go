@@ -64,6 +64,18 @@ func applyDiscount(products []*pbProduct.ProductMessage, discounts []*Discount) 
 	var filtered []*pbProduct.ProductMessage
 
 	for _, p := range products {
+		// instead of individually selecting discounts for each product in for loop, 
+		// we could also have these grouped in previous steps (select from data base)
+		/*
+			"product-sku-1": [
+				{
+					"discount1"
+				},
+				{
+					"discount2"
+				}
+			]
+		*/
 		productDiscounts := discountsPerProduct(p, discounts)
 
 		// sorting is needed to get the highest discount applied as the final discount
