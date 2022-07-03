@@ -31,6 +31,7 @@ docker-compose up
 - [x] Implement services: _Product, Discount_
 - [x] Implement _Gateway_ to expose services (Product only in this case)
 - [x] Write tests (Product and Discount services)
+- [ ] Write tests for API Gateway
 - [x] All services and tests runnable by 1 command
 - [x] Products in _boots_ category have discount of 30%
 - [x] Products with sku _000003_ have discount of 15%
